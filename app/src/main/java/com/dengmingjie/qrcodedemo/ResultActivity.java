@@ -1,14 +1,19 @@
 package com.dengmingjie.qrcodedemo;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dengmingjie.qrcodedemo.util.SaveImageUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -32,6 +37,32 @@ public class ResultActivity extends Activity {
 		Bundle extras = getIntent().getExtras();
 
 		mResultImage = (ImageView) findViewById(R.id.result_image);
+        mResultImage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog dialog = new AlertDialog.Builder(ResultActivity.this)
+                        .setIcon(R.mipmap.ic_launcher)  // 设置图片
+                        .setTitle("提示")  // 设置标题
+                        .setMessage("是否要保存二维码图片？")  // 设置内容
+                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Toast.makeText(MainActivity.this, "点击了 否", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Toast.makeText(MainActivity.this, "点击了 是", Toast.LENGTH_SHORT).show();
+                                SaveImageUtils.saveImageView(SaveImageUtils.getViewBitmap(mResultImage));
+                                dialog.dismiss();
+                            }
+                        }).create();
+                dialog.show();
+                return true;
+            }
+        });
 		mResultText = (TextView) findViewById(R.id.result_text);
 
 		if (null != extras) {

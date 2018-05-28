@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
@@ -430,8 +432,8 @@ public final class CaptureActivity extends AppCompatActivity implements SurfaceH
 								mHandler.sendMessage(m);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putInt("width", 540);
-                                bundle.putInt("height", 540);
+                                bundle.putInt("width", mCropRect.width());
+                                bundle.putInt("height", mCropRect.height());
                                 bundle.putString("result", result.getText());
                                 bundle.putString("QRCode", "1");
                                 startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));

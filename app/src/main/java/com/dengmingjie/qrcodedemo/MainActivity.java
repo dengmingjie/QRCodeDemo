@@ -1,7 +1,9 @@
 package com.dengmingjie.qrcodedemo;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dengmingjie.qrcodedemo.util.SaveImageUtils;
+import com.dengmingjie.qrcodedemo.util.Utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -35,8 +39,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+        Utils.init(this);
         et = (EditText) findViewById(R.id.et);
         iv = (ImageView) findViewById(R.id.iv);
+        iv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(R.mipmap.ic_launcher)  // 设置图片
+                        .setTitle("提示")  // 设置标题
+                        .setMessage("是否要保存二维码图片？")  // 设置内容
+                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Toast.makeText(MainActivity.this, "点击了 否", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Toast.makeText(MainActivity.this, "点击了 是", Toast.LENGTH_SHORT).show();
+                                SaveImageUtils.saveImageView(SaveImageUtils.getViewBitmap(iv));
+                                dialog.dismiss();
+                            }
+                        }).create();
+                dialog.show();
+                return true;
+            }
+        });
         btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(this);
         btn2 = (Button) findViewById(R.id.btn2);
