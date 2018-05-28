@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +73,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn1.setOnClickListener(this);
         btn2 = (Button) findViewById(R.id.btn2);
         btn2.setOnClickListener(this);
+    }
+
+    // 上次按下Back键的系统时间戳
+    private long lastBackTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            // 当前按下Back键的系统时间戳
+            long currBackTime = System.currentTimeMillis();
+            // 比较时间差
+            if (currBackTime - lastBackTime > 2000) {
+                // 大于2秒，则提示
+                Toast.makeText(this, "再次点击将退出", Toast.LENGTH_SHORT).show();
+                //ToastUtils.showShortToast("再次点击将退出");
+                //Settings.RuntimeLog.Warn("再次点击将退出");
+                lastBackTime = currBackTime;
+            } else {
+                // 小于2秒，则退出程序
+                finish();
+                // 退出程序动画效果
+                overridePendingTransition(0, android.R.anim.fade_out);
+            }
+            return true;  // 拦截事件传递,从而屏蔽Back键。
+        } else if (KeyEvent.KEYCODE_HOME == keyCode) {  // 无效
+            //ToastUtils.showShortToast("Home键已被禁用");
+            //Settings.RuntimeLog.Debug("Home键已被禁用");
+            return true;  // 同理
+        } else if (KeyEvent.KEYCODE_MENU == keyCode) {  // 无效
+            //ToastUtils.showShortToast("Menu键已被禁用");
+            //Settings.RuntimeLog.Debug("Menu键已被禁用");
+            return true;  // 同理
+        }
+        //ToastUtils.showShortToast("未监控按键: %d", keyCode);
+        //Settings.RuntimeLog.Debug("未监控按键: {}", keyCode);
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
