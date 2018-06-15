@@ -32,14 +32,13 @@ public class SaveObservable implements Observable.OnSubscribe<String> {
         } else {
             try {
                 String sdcard = Environment.getExternalStorageDirectory().toString();
-                File file = new File(sdcard + "/Download");
+                File file = new File(sdcard + "/Pictures");
                 if (!file.exists()) {
                     file.mkdirs();
                 }
 
                 File imageFile = new File(file.getAbsolutePath(),"QRCode_" + new Date().getTime()+".jpg");
-                FileOutputStream outStream;
-                outStream = new FileOutputStream(imageFile);
+                FileOutputStream outStream = new FileOutputStream(imageFile);
                 drawingCache.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
                 subscriber.onNext(imageFile.getPath());
                 subscriber.onCompleted();

@@ -12,7 +12,7 @@ import rx.schedulers.Schedulers;
  * Author: dengmingjie
  * Date: 2018.05.25 17:50 星期五
  * Email: mjdeng@1015shop.com
- * Desc:
+ * Desc: 保存图片工具类
  */
 public class SaveImageUtils {
 
